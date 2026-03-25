@@ -2,6 +2,7 @@ package com.example.offers.api;
 
 import com.example.offers.api.dto.EvaluateOfferRequest;
 import com.example.offers.api.dto.EvaluateOfferResponse;
+import com.example.offers.api.mapper.OfferResponseMapper;
 import com.example.offers.application.OfferEvaluationService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -16,10 +17,12 @@ import jakarta.ws.rs.core.MediaType;
 public class OfferEvaluationResource {
     @Inject
     OfferEvaluationService offerEvaluationService;
+    @Inject
+    OfferResponseMapper offerResponseMapper;
 
     @POST
     @Path("/evaluate")
     public EvaluateOfferResponse evaluate(EvaluateOfferRequest request) {
-        return offerEvaluationService.evaluate(request);
+        return offerResponseMapper.toResponse(offerEvaluationService.evaluate(request));
     }
 }
