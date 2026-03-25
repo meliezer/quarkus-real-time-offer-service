@@ -2,10 +2,12 @@ package com.example.offers.infrastructure.cache;
 
 import com.example.offers.application.cache.DecisionCacheService;
 import com.example.offers.domain.model.OfferEvaluationResult;
+import io.quarkus.arc.Unremovable;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.Optional;
 
+@Unremovable
 @ApplicationScoped
 public class NoOpDecisionCacheService implements DecisionCacheService {
 
