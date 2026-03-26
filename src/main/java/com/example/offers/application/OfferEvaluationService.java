@@ -2,6 +2,7 @@ package com.example.offers.application;
 
 import com.example.offers.api.dto.EvaluateOfferRequest;
 import com.example.offers.application.cache.DecisionCacheService;
+import com.example.offers.application.cache.OfferDecisionCacheKeyFactory;
 import com.example.offers.domain.model.DecisionSource;
 import com.example.offers.domain.model.OfferDecision;
 import com.example.offers.domain.model.OfferEvaluationResult;
@@ -16,8 +17,11 @@ public class OfferEvaluationService {
     @Inject
     DecisionCacheService decisionCacheService;
 
+    @Inject
+    OfferDecisionCacheKeyFactory cacheKeyFactory;
+
     public OfferEvaluationResult evaluate(EvaluateOfferRequest request) {
-        String cacheKey = buildCacheKey(request);
+        String cacheKey = cacheKeyFactory.from(request);
 
         return decisionCacheService.get(cacheKey).orElseGet(() -> evaluateFromRules(request));
     }
@@ -25,10 +29,5 @@ public class OfferEvaluationService {
     private OfferEvaluationResult evaluateFromRules(EvaluateOfferRequest request) {
         return new OfferEvaluationResult(request.customerId(), request.segment(),
                 DecisionSource.RULES, List.of(new OfferDecision("VIP_FREEBET", 95)));
-    }
-
-    private String buildCacheKey(EvaluateOfferRequest request) {
-        return String.join(":", request.customerId(), request.segment(), request.country(),
-                request.channel());
     }
 }
