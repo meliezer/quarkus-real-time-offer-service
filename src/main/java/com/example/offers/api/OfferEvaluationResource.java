@@ -16,10 +16,16 @@ import jakarta.ws.rs.core.MediaType;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class OfferEvaluationResource {
+
+    private final OfferEvaluationService offerEvaluationService;
+    private final OfferResponseMapper offerResponseMapper;
+
     @Inject
-    OfferEvaluationService offerEvaluationService;
-    @Inject
-    OfferResponseMapper offerResponseMapper;
+    public OfferEvaluationResource(OfferEvaluationService offerEvaluationService,
+            OfferResponseMapper offerResponseMapper) {
+        this.offerEvaluationService = offerEvaluationService;
+        this.offerResponseMapper = offerResponseMapper;
+    }
 
     @POST
     @Path("/evaluate")

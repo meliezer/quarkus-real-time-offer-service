@@ -14,11 +14,15 @@ import java.util.List;
 @ApplicationScoped
 public class OfferEvaluationService {
 
-    @Inject
-    DecisionCacheService decisionCacheService;
+    private final DecisionCacheService decisionCacheService;
+    private final OfferDecisionCacheKeyFactory cacheKeyFactory;
 
     @Inject
-    OfferDecisionCacheKeyFactory cacheKeyFactory;
+    public OfferEvaluationService(DecisionCacheService decisionCacheService,
+            OfferDecisionCacheKeyFactory cacheKeyFactory) {
+        this.decisionCacheService = decisionCacheService;
+        this.cacheKeyFactory = cacheKeyFactory;
+    }
 
     public OfferEvaluationResult evaluate(EvaluateOfferRequest request) {
         String cacheKey = cacheKeyFactory.from(request);
