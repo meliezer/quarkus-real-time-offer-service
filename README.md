@@ -1,114 +1,100 @@
 # Quarkus Real-Time Offer Service
 
-> Real-time offer evaluation service built with Quarkus, showcasing clean architecture, TDD, and scalable backend
-> design.
-
----
+A production-style backend service built with Quarkus (Java 21), focused on real-time offer validation and processing.
 
 ## 🚀 Overview
 
-This project is a backend service for evaluating offers in real time, inspired by high-throughput systems commonly found
-in fintech, iGaming, and recommendation platforms.
+This project demonstrates how to design and implement a high-throughput backend service using modern Java and Quarkus,
+applying clean architecture principles and Test-Driven Development (TDD).
 
-It was designed and built from scratch to demonstrate:
+It is intentionally designed as a realistic microservice, not a toy example.
 
-* Architectural ownership
-* Clean and maintainable code structure
-* Test-Driven Development (TDD)
-* Production-oriented backend design
+## 🧱 Architecture
 
----
+- Quarkus (Java 21)
+- REST APIs
+- Constructor-based dependency injection
+- Layered architecture (resource → service → domain)
+- Centralized validation and error handling
+- Isolated cache key strategy
 
-## 🧠 Why this project
-
-While I have extensive experience with Quarkus in production, most work was within existing systems.
-
-This project focuses on:
-
-* designing a system end-to-end
-* making architectural decisions explicit
-* building a clean and understandable codebase
-* showing a realistic development workflow through Git history
-
----
-
-## ✨ Key Features
-
-* Real-time offer evaluation API
-* Cache abstraction layer (ready for Redis integration)
-* Input validation with consistent error responses
-* Clear separation of concerns (API / Application / Infrastructure)
-* TDD-driven implementation with meaningful commit history
-
----
-
-## 🏗️ Architecture
-
-The system follows a layered architecture inspired by Hexagonal Architecture (Ports & Adapters):
+### High-Level Flow
 
 ```text
-API (REST)
-  ↓
-APPLICATION (services, ports)
-  ↓
-INFRASTRUCTURE (adapters: cache, persistence)
+Client
+  |
+  v
+REST Resource
+  |
+  v
+Service Layer
+  |
+  v
+Domain / Business Logic
+  |
+  +--> Validation
+  |
+  +--> Cache Key Strategy
+  |
+  +--> Standardized Error Handling
 ```
 
-### Main components
+### ASCII Architecture Diagram
 
-* **OfferEvaluationResource** → REST entry point
-* **OfferEvaluationService** → application logic
-* **DecisionCacheService** → cache abstraction (port)
-* **NoOpDecisionCacheService** → default adapter
-* **OfferDecisionCacheKeyFactory** → cache key generation
-* DTOs & mappers → separation between API and domain
-
----
-
-## 🔁 TDD Approach
-
-The project was developed using strict TDD principles:
-
-1. Write failing test
-2. Implement minimal logic
-3. Refactor without changing behavior
-
-The Git history intentionally reflects this flow:
-
-* test commits (red)
-* feature commits (green)
-* refactor commits (clean-up)
-
----
-
-## ✅ Validation
-
-Input validation is implemented using Jakarta Bean Validation:
-
-* Required fields enforced via `@NotBlank`
-* Centralized error handling via custom exception mapper
-
-### Example error response
-
-```json
-{
-    "code": "VALIDATION_ERROR",
-    "message": "Request validation failed",
-    "details": [
-        "customerId must not be blank"
-    ]
-}
+```text
++-------------------+
+|      Client       |
++-------------------+
+          |
+          v
++-------------------+
+|   REST Resource   |
+|  HTTP entrypoint  |
++-------------------+
+          |
+          v
++-------------------+
+|   Service Layer   |
+| orchestration/use |
+|      cases        |
++-------------------+
+          |
+          v
++-------------------+
+| Domain / Business |
+|       Logic       |
++-------------------+
+      /    |     \
+     v     v      v
++---------+ +-------------+ +----------------------+
+|Request  | | Cache Key   | | Standardized Error   |
+|Validation| | Strategy    | | Handling / Responses |
++---------+ +-------------+ +----------------------+
 ```
 
----
+### Key Design Choices
 
-## ▶️ Running locally
+- **TDD-first approach**: features start from failing tests
+- **No field injection**: improved testability and clarity
+- **Standardized error responses**: consistent API behavior
+- **Separation of concerns** across layers
+- **Cache key isolation** to avoid hidden coupling
 
-Start in dev mode:
+## ⚙️ Tech Stack
 
-```bash
-./mvnw quarkus:dev
-```
+- Java 21
+- Quarkus
+- JUnit 5
+- Mockito
+- Maven
+
+## 🧪 Testing
+
+The project follows a strict TDD approach:
+
+- Tests are written before implementation
+- Validation scenarios are explicitly tested
+- Focus on behavior rather than implementation details
 
 Run tests:
 
@@ -116,48 +102,40 @@ Run tests:
 ./mvnw test
 ```
 
----
+## ▶️ Running the Application
 
-## 🔮 Future Improvements
+```bash
+./mvnw quarkus:dev
+```
 
-The current implementation focuses on clean architecture and TDD foundations.
-Next steps would evolve the system into a production-grade backend:
+## 📌 Example Features
 
-* **Redis-backed cache**
-  Replace the no-op cache with a distributed cache for low-latency access
+- Request validation with meaningful error responses
+- Clean service layer abstraction
+- Cache-ready architecture
+- Testable and maintainable codebase
 
-* **PostgreSQL-backed rule engine**
-  Persist and manage offer rules dynamically
+## 🤖 AI-Assisted Development
 
-* **Observability (metrics & tracing)**
-  Integrate Micrometer and OpenTelemetry for monitoring and diagnostics
+This project was developed using AI-assisted tools, with a strong focus on:
 
-* **Performance & concurrency tuning**
-  Optimize for high throughput and low latency scenarios
+- Code correctness and validation
+- Avoiding "AI-generated noise"
+- Maintaining clean, production-quality code
 
-* **Event-driven architecture (Kafka)**
-  Support asynchronous processing and real-time data pipelines
+All generated code was reviewed, validated, and refined through TDD.
 
----
+## 🎯 Purpose
 
-## 🧰 Tech Stack
+This repository is intended to demonstrate:
 
-* Java 21
-* Quarkus
-* RESTEasy Reactive
-* Jakarta Validation
-* Mockito / RestAssured
-* Maven Wrapper
+- Hands-on expertise with Quarkus
+- Backend architecture skills
+- Testing discipline (TDD)
+- Production-oriented coding practices
 
----
+## 🔗 Author
 
-## 📌 Notes
-
-This project intentionally prioritizes:
-
-* clean architecture
-* maintainability
-* clarity of intent
-* meaningful commit history
-
-over premature optimization or unnecessary complexity.
+Menashe Eliezer  
+Senior Backend Engineer  
+LinkedIn: https://linkedin.com/in/menashe-eliezer-254267
