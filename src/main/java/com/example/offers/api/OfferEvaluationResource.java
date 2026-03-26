@@ -5,6 +5,7 @@ import com.example.offers.api.dto.EvaluateOfferResponse;
 import com.example.offers.api.mapper.OfferResponseMapper;
 import com.example.offers.application.OfferEvaluationService;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -22,7 +23,7 @@ public class OfferEvaluationResource {
 
     @POST
     @Path("/evaluate")
-    public EvaluateOfferResponse evaluate(EvaluateOfferRequest request) {
+    public EvaluateOfferResponse evaluate(@Valid EvaluateOfferRequest request) {
         return offerResponseMapper.toResponse(offerEvaluationService.evaluate(request));
     }
 }
